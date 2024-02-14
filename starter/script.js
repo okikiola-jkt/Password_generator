@@ -92,17 +92,44 @@ function getPasswordOptions() {
   let passInfo = [];
   let passChars = '';
 
-  const characterAmount = 12; 
+  const characterAmount = parseInt(prompt("Enter the amount of characters you want for your password. NOTE: Must be between 8-128 characters"));
 
-  // Include special characters, numbers, and both lowercase and uppercase letters
-  passInfo = passInfo.concat(specialCharacters, numericCharacters, lowerCasedCharacters, upperCasedCharacters);
+  if (characterAmount >= 8 && characterAmount < 129) {
+    if (confirm("Would you like to include NUMBERS?")) {
+      passInfo = passInfo.concat(numericCharacters);
+      passChars += getRandom(numericCharacters);
+    }
 
-  // Generate password
-  for (let i = 0; i < characterAmount; i++) {
-    passChars += getRandom(passInfo);
+    if (confirm("Would you like to include SPECIAL characters?")) {
+      passInfo = passInfo.concat(specialCharacters);
+      passChars += getRandom(specialCharacters);
+    }
+
+    if (confirm("Would you like to include LOWERCASE characters?")){
+      passInfo = passInfo.concat(lowerCasedCharacters)
+      passChars += getRandom(lowerCasedCharacters);
+    }
+
+    if (confirm("Would you like to include UPPERCASE characters?")){
+      passInfo = passInfo.concat(upperCasedCharacters)
+      passChars += getRandom(upperCasedCharacters);
+    }
+
+
+    if (!passInfo.length) {
+      alert("You need to select at least one option, please try again!");
+      return;
+    }
+
+    for (let i = passChars.length; i < characterAmount; i++) {
+      passChars += getRandom(passInfo);
+    }
+
+    return passChars;
+  } else {
+    alert("You need to provide a valid length!");
+    return;
   }
-
-  return passChars;
 }
 
 // Function for getting a random element from an array
@@ -112,7 +139,7 @@ function getRandom(arr) {
   return randomChar;
 }
 
-// Function to generate password with predefined criteria
+// Function to generate password with user input
 function generatePassword() {
   return getPasswordOptions();
 }
